@@ -20,6 +20,23 @@ that's the case, and I'd be happy to debug :)
 
 author: @arjunsavel
 """
+import os
+
+import numpy as np
+
+
+try:
+    from tqdm import tqdm
+except ImportError:
+    print(
+        """The current progress bar implementation uses the tqdm package.
+        If you would like to use this progress bar, please see
+        the tqdm installation instruction:
+        https://github.com/tqdm/tqdm#installation"""
+    )
+
+    def tqdm(iterator, **kwargs):
+        return iterator
 
 ######################## Pt. 1: chunking opacities ########################
 
