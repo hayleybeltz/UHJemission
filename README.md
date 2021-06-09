@@ -1,2 +1,1 @@
-# UHJemission
-exploring emission spectra for UHJs
+#A project exploring the 1-5 micron range in high resolution. Work done by Hayley Beltz, Arjun Savel, and Isaac Malksy. 
