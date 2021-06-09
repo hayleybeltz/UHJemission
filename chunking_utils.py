@@ -14,8 +14,8 @@ Example instructions / workflow:
 And that should work!
 
 There's some replicated (and likely unnecessary) code, but it hopefully shouldn't 
-be too confusing. Furthermore, These functions have not been tested in a module 
-setting, so they might not work right out of the box. Please let me know if
+be too confusing. Furthermore, these functions have not been subjected to robust
+unit testing, so they might not work right out of the box. Please let me know if
 that's the case, and I'd be happy to debug :)
 
 author: @arjunsavel
