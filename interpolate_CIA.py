@@ -4,11 +4,12 @@ resolution and subsequently chunk it up.
 
 Example instructions / workflow:
 
->>> reference_file = '../opacFe.dat'
+>>> reference_file = '../opacFe/opacFe.dat'
 >>> CIA_file = 'opacCIA.dat'
 >>> interpolate_CIA(CIA_file, reference_file)
 >>> CIA_file = 'opacCIA_highres.dat'
->>> chunk_wavelengths_CIA(CIA_file)
+>>> ref_file_base = '../opacFe/opacFe'
+>>> chunk_wavelengths_CIA(CIA_file, ref_file_base)
 
 And that should work!
 
@@ -64,11 +65,22 @@ def interpolate_CIA(CIA_file, reference_file):
         to higher resolution.
     """
 
-    real_wavelength_grid = get_wav_grid(reference_file)
+    real_wavelength_grid = get_wav_grid(reference_file, progress=True)
 
     f = open(CIA_file)
     f1 = f.readlines()
     f.close()
+
+    temperatures = []
+    wavelengths = []
+    Hels = []
+    HeHs = []
+    CH4CH4s = []
+    H2Hes = []
+    H2CH4s = []
+    H2Hs = []
+    H2H2s = []
+    CO2CO2s = []
 
     # read through all lines in the CIA file
     for line in tqdm(f1[1:], desc="Reading CIA file"):
@@ -199,7 +211,7 @@ def interpolate_CIA(CIA_file, reference_file):
     return
 
 
-def get_wav_grid(file):
+def get_wav_grid(file, progress=False):
     """
     Returns the wavelength grid used in an opacity file.
 
@@ -207,6 +219,8 @@ def get_wav_grid(file):
     -------
         :file: (str) path to opacity file with the wavelength grid of interest. e.g.,
                     'opacFe/opacFe.dat'
+        :progress: (bool) whether or not to include a progress bar (if tqdm is installed).
+                    Useful for the biggest opacity file!
 
     Outputs
     -------
@@ -220,8 +234,13 @@ def get_wav_grid(file):
     f1 = f.readlines()
     f.close()
 
+    if progress:
+        iterator = tqdm(f1[2:], desc='Grabbing wavelength grid')
+    else:
+        iterator = f1[2:]
+
     # read through all lines in the opacity file; first few lines are header!
-    for x in f1[2:]:
+    for x in iterator:
 
         # skip blank lines
         if not x:
@@ -275,7 +294,7 @@ def chunk_wavelengths_CIA(file, ref_file_base):
 
     ntemps = 0
 
-    for line in tqdm(f1):  # read through all lines in the opacity file
+    for line in tqdm(f1, desc='Writing lines to chunk files'):  # read through all lines in the opacity file
         if not line or line == "\n":
             continue  # don't want it to break
 
@@ -316,7 +335,7 @@ def get_wav_per_chunk(file_suffix, ref_file_base):
         :len_grid: (int) number of wavelengths in chunk.
     """
 
-    file = ref_file_base + str(ref_file_base) + ".dat"
+    file = ref_file_base + str(file_suffix) + ".dat"
 
     real_wavelength_grid = get_wav_grid(file)
 
