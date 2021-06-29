@@ -1,1 +1,5 @@
 IgnoredData/*
+
+
+# exception to the rule
+!IgnoredData/.gitkeep 
